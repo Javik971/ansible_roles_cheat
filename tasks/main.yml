@@ -1,27 +1,27 @@
 ---
 
-- name: Création dossier cheat
+- name: Création du dossier cheat.
   ansible.builtin.file:
     path: '{{ cheat_path }}'
     state: directory
     mode: '0755'
 
-- name: Telechargement archive cheat
+- name: Téléchargement de l'archive cheat.gz.
   ansible.builtin.get_url: 
     url: 'https://github.com/cheat/cheat/releases/download/4.2.3/cheat-linux-amd64.gz'
     dest: '{{ cheat_path }}/cheat.gz'
 
 #Ansible n'a pas de module gérant les .gz
-- name: Extraction archive
+- name: Extraction de l'archive.
   ansible.builtin.shell: 'gunzip {{ cheat_path }}/cheat.gz'
 
-- name: Autorisation d'execution
+- name: Autorisation d'execution du binaire cheat.
   ansible.builtin.file:
     path: '{{ cheat_path }}/cheat'
     state: touch
     mode: '0755'
 
-- name: Add another bin dir to system-wide $PATH.
+- name: Ajout du dossier cheat dans PATH.
   ansible.builtin.copy:
     dest: '/etc/profile.d/cheat.sh'
     content: 'PATH=$PATH:{{ cheat_path }}'
